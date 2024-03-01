@@ -31,6 +31,10 @@ export default class order extends Model {
     arr_sub_id: {
       type: DataTypes.STRING(255),
       allowNull: true
+    },
+    date_order: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
     }
   }, {
     sequelize,

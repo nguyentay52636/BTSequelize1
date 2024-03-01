@@ -8,10 +8,10 @@ const addNewRatingRes = async (req, res) => {
     let { resId, userId, amount } = req.body;
     console.log(resId, userId, amount);
     let checkRating = await model.rate_res.findOne({
-      where:{
-        res_id : resId,
-        user_id: userId
-      }
+      where: {
+        res_id: resId,
+        user_id: userId,
+      },
     });
     if (checkRating) {
       responseApi(res, 200, {}, 'Already rated');
@@ -23,7 +23,7 @@ const addNewRatingRes = async (req, res) => {
         date_rate: new Date(),
       };
       await model.rate_res.create(rating);
-      responseApi(res, 200, rating, 'create like success');
+      responseApi(res, 200, rating, 'create rating success');
     }
   } catch (error) {
     responseApi(res, 500, '', 'An error occurred while getting');
@@ -42,7 +42,7 @@ const getRatingByUser = async (req, res) => {
       where: {
         user_id: userId,
       },
-      attributes: ['user_id', 'res_id', 'date_rate'],
+      include: ['user', 're'],
     });
     responseApi(res, 200, data, 'callapi success');
   } catch (error) {
@@ -56,7 +56,7 @@ const getRatingByRestaurant = async (req, res) => {
       where: {
         res_id: resId,
       },
-      attributes: ['user_id', 'amount', 'date_rate'],
+      include: ['user', 're'],
     });
     responseApi(res, 200, data, 'callapi success');
   } catch {

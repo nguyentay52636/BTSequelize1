@@ -2,9 +2,22 @@ import initModels from '../models/init-models.js';
 import sequelize from '../models/connect.js';
 import { responseApi } from '../config/response.js';
 const model = initModels(sequelize);
-let { userId, foodId, amount, code, arrSubId } = req.body;
+
 const createOrder = async (req, res) => {
+  let { userId, foodId, amount, code, arrSubId } = req.body;
+  // console.log(userId, foodId, amount, code, arrSubId);
   try {
+    const existingUser = await model.user.findByPk(userId); // Kiểm tra userId có tồn tại trong bảng user hay không
+    if (!existingUser) {
+      responseApi(
+        res,
+        400,
+        {},
+        'Invalid userId. Please provide a valid userId.'
+      );
+      return;
+    }
+
     let newOrder = {
       user_id: userId,
       food_id: foodId,
@@ -24,4 +37,5 @@ const createOrder = async (req, res) => {
     );
   }
 };
+
 export default createOrder;
